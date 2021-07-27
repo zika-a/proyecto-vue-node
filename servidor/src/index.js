@@ -3,7 +3,8 @@ const express = require("express");
 const app = express();
 
 app.set("port", process.env.PORT || 3000);
-
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 //Levantar el servidor
 app.listen(app.get("port"), (error) => {
   if (error) {
@@ -12,5 +13,5 @@ app.listen(app.get("port"), (error) => {
     console.log("Servidor en puerto: ", app.get("port"));
   }
 });
-
-//Creación de rutas
+//para ver si nos podemos conectar
+require("./config/connection");
