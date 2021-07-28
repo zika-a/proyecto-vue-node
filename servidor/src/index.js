@@ -15,3 +15,5 @@ app.listen(app.get("port"), (error) => {
 });
 //para ver si nos podemos conectar
 require("./config/connection");
+
+app.use(require('./routes/routes'));
