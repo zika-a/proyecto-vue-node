@@ -52,9 +52,24 @@ function eliminarBoardgame(req, res){
         });
     }
 }
+function eliminarFavoritos (req, res){
+    if(connection){
+        const {id} = req.params;
+        let sql = "delete from favorites where idBoardgame = ?";
+        connection.query(sql, [id], (err, data) => {
+            if(err){
+                res.status(400).json(err);
+            } else{
+                let mensaje = data.affectedRows === 0 ? "Juego favorito no encontrado":"Juego favorito eliminado con exito";
+                res.json({error: false, result:data, mensaje});
+            }
+        });
+    }
+}
 
 module.exports = {
     listarById,
     actualizar,
     eliminarBoardgame,
+    eliminarFavoritos,
 };
