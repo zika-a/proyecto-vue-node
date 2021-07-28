@@ -18,6 +18,25 @@ function listarById (req, res) {
     }
 }
 
+function actualizar (req, res){
+    if(connection){
+        const {id} = req.params;
+        const boardgame = req.body;
+        let sql = "update boardgames set ? where id = ?";
+       connection.query(sql, [id, boardgame], (err, data)=>{
+           if(err){
+               res.status(400).json(err);
+           }else{
+               let mensaje ="";
+               if(data.changedRows === 0) mensaje ="La información es la misma";
+               else mensaje="Juego actualizado con exito";
+               res.json({error= false, result: data, mensaje});
+           }
+       });
+    }
+}
+
 module.exports = {
     listarById,
+    actualizar,
 };
