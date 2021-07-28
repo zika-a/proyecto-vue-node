@@ -18,6 +18,58 @@ function listarById (req, res) {
     }
 }
 
+function actualizar (req, res){
+    if(connection){
+        const {id} = req.params;
+        const boardgame = req.body;
+        let sql = "update boardgames set ? where id = ?";
+       connection.query(sql, [boardgame, id], (err, data)=>{
+           if(err){
+               res.status(400).json(err);
+           }else{
+               let mensaje ="";
+               if(data.changedRows === 0) mensaje ="La información es la misma";
+               else mensaje="Juego actualizado con exito";
+               res.json({error: false, result: data, mensaje});
+           }
+       });
+    }
+}
+
+function eliminarBoardgame(req, res){
+    if(connection){
+        const {id} = req.params;
+        let sql = "delete from boardgames where id = ?"
+        connection.query(sql, [id], (err, data) => {
+            if(err){
+                res.status(400).json(err);
+            }else{
+                let mensaje = "";
+                if(data.changedRows === 0) mensaje="Juego no encontrado";
+                else mensaje = "Juego elimnado con exito";
+                res.json({error: false, result: data, mensaje});
+            }
+        });
+    }
+}
+function eliminarFavoritos (req, res){
+    if(connection){
+        const {id} = req.params;
+        let sql = "delete from favorites where idBoardgame = ?";
+        connection.query(sql, [id], (err, data) => {
+            if(err){
+                res.status(400).json(err);
+            } else{
+                let mensaje = data.affectedRows === 0 ? "Juego favorito no encontrado":"Juego favorito eliminado con exito";
+                res.json({error: false, result:data, mensaje});
+            }
+        });
+    }
+}
+
 module.exports = {
     listarById,
+    actualizar,
+    eliminarBoardgame,
+    eliminarFavoritos,
 };
