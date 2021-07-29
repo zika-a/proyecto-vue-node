@@ -24,6 +24,24 @@ function actualizar (req, res){
     if(connection){
         const {id} = req.params;
         const boardgame = req.body;
+        if(boardgame.name){
+            return res.status(400).send({error:true, mensaje:"El nombre no se puede modificar"})
+        }
+        if(boardgame.id){
+            return res.status(400).send({error: true, mensaje: "El id no se puede modificar"});
+        }
+        if(boardgame.publisher && boardgame.publisher.length > 60 ){
+            return res.status(400).send({error:true, mensaje:"El editor no debe tener mas de 60 caracteres"})
+        }
+        if(boardgame.category && boardgame.category.length != 2){
+            return res.status(400).send({error:true, mensaje:"La categoria debe tener dos caracteres"})
+        }
+        if(boardgame.description && boardgame.description.length > 200){
+            return res.status(400).send({error:true, mensaje:"La descripcion no debe tener mas de 200 caracteres"})
+        }
+        if(boardgame.year && boardgame.year!=4){
+            return res.status(400).send({error:true, mensaje:"El año debe tener 4 caracteres"})
+        }
         let sql = "update boardgames set ? where id = ?";
        connection.query(sql, [boardgame, id], (err, data)=>{
            if(err){
@@ -89,7 +107,7 @@ function listar (req, res) {
 function crear(req, res){
     if(connection){
         const boardgame = req.body;
-        if(!boardgame.Name){
+        if(!boardgame.name){
             return res.status(400).send({error:true, mensaje:"El nombre es obligatorio"})
         }
         if(!boardgame.publisher){
@@ -98,6 +116,7 @@ function crear(req, res){
         if(!boardgame.category){
             return res.status(400).send({error:true, mensaje:"La categoria es obligatoria"})
         }
+
         if(boardgame.Name && boardgame.Name.length > 80){
             return res.status(400).send({error:true, mensaje:"El nombre no debe tener mas de 80 caracteres"})
         }
@@ -107,10 +126,10 @@ function crear(req, res){
         if(boardgame.category && boardgame.Category.length != 2){
             return res.status(400).send({error:true, mensaje:"La debe tener dos caracteres"})
         }
-        if(boardgame.Description.length > 200){
+        if(boardgame.description.length > 200){
             return res.status(400).send({error:true, mensaje:"La descripcion no debe tener mas de 200 caracteres"})
         }
-        if(boardgame.Year.length > 4){
+        if(boardgame.year.length > 4){
             return res.status(400).send({error:true, mensaje:"El año debe tener 4 caracteres"})
         }
 
