@@ -154,13 +154,13 @@ function crearfav(req,res){
     if(connection){
         const favorites = req.body;
 
-        let sql ="insert into favorites set ?";
+        let sql ="INSERT INTO favorites (idBoardgame) VALUES (?)";
 
         if(!favorites.idBoardgame){
             return res.status(400).send({error:true, mensaje:"No se envio idBoardgame"})
         }
         
-        connection.query(sql,[id], (err, data) => {
+        connection.query(sql,[favorites.idBoardgame], (err, data) => {
             if(err){
                 res.status(400).json(err);
             } else {
