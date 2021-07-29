@@ -98,13 +98,13 @@ function crear(req, res){
         if(!boardgame.category){
             return res.status(400).send({error:true, mensaje:"La categoria es obligatoria"})
         }
-        if(boardgame.Name.length > 80 && Boardgame.Name){
+        if(boardgame.Name && boardgame.Name.length > 80){
             return res.status(400).send({error:true, mensaje:"El nombre no debe tener mas de 80 caracteres"})
         }
-        if(boardgame.Publisher.length > 60 && Boardgame.publisher){
+        if(boardgame.publisher && boardgame.Publisher.length > 60){
             return res.status(400).send({error:true, mensaje:"El editor no debe tener mas de 60 caracteres"})
         }
-        if(boardgame.Category.length != 2 && Boardgame.category){
+        if(boardgame.category && boardgame.Category.length != 2){
             return res.status(400).send({error:true, mensaje:"La debe tener dos caracteres"})
         }
         if(boardgame.Description.length > 200){
@@ -134,7 +134,7 @@ function listarfav(req, res){
                 res.status(400).json(err);
             }else{
                 if(data.idBoardgame != null){
-                    res.json({result: data, favorite});
+                    res.json({result: data});
                 }
                 
             }
@@ -148,7 +148,7 @@ function crearfav(req,res){
 
         let sql ="insert into favorites set ? where id = ?";
 
-        connection.query(sql,[Boardgame, id], (err, data) => {
+        connection.query(sql,[favorites, id], (err, data) => {
             if(err){
                 res.status(400).json(err);
             } else {
