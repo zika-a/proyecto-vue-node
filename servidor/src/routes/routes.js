@@ -1,5 +1,4 @@
 const express = require('express');
-
 const routes = express.Router();
 
 const {listarById, actualizar, eliminarBoardgame, eliminarFavoritos,listar,crear,listarfav,crearfav} = require('../controllers/controller');
