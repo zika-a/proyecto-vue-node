@@ -116,14 +116,15 @@ function crear(req, res){
         if(!boardgame.category){
             return res.status(400).send({error:true, mensaje:"La categoria es obligatoria"})
         }
-        if(boardgame.name.length > 80 && boardgame.name){
+
+        if(boardgame.Name && boardgame.Name.length > 80){
             return res.status(400).send({error:true, mensaje:"El nombre no debe tener mas de 80 caracteres"})
         }
-        if(boardgame.publisher.length > 60 && boardgame.publisher){
+        if(boardgame.publisher && boardgame.Publisher.length > 60){
             return res.status(400).send({error:true, mensaje:"El editor no debe tener mas de 60 caracteres"})
         }
-        if(boardgame.category.length != 2 && boardgame.category){
-            return res.status(400).send({error:true, mensaje:"La categoria debe tener dos caracteres"})
+        if(boardgame.category && boardgame.Category.length != 2){
+            return res.status(400).send({error:true, mensaje:"La debe tener dos caracteres"})
         }
         if(boardgame.description.length > 200){
             return res.status(400).send({error:true, mensaje:"La descripcion no debe tener mas de 200 caracteres"})
@@ -152,7 +153,7 @@ function listarfav(req, res){
                 res.status(400).json(err);
             }else{
                 if(data.idBoardgame != null){
-                    res.json({result: data, favorite});
+                    res.json({result: data});
                 }
                 
             }
@@ -166,7 +167,7 @@ function crearfav(req,res){
 
         let sql ="insert into favorites set ? where id = ?";
 
-        connection.query(sql,[Boardgame, id], (err, data) => {
+        connection.query(sql,[favorites, id], (err, data) => {
             if(err){
                 res.status(400).json(err);
             } else {
