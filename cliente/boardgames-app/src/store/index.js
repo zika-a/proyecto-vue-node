@@ -62,6 +62,14 @@ export default new Vuex.Store({
       .then(onComplete)
       .catch(onError)
     },
+    listarFav({commit}, {onComplete, onError}) {
+      axios.get("http://localhost:3000/favorites")
+      .then(res => {
+        commit('SET_JUEGOS', res.data.result);
+        onComplete(res);
+      })
+      .catch(onError);
+    },
   },
   modules: {
   }
