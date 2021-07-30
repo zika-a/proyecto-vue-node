@@ -8,7 +8,7 @@ function listarById (req, res) {
             if(err){
                 res.status(400).json(err);
             }else{
-                res.json({error: false, result: data});
+                res.json({error: false, result: data[0]});
             }
         });
     }
@@ -35,7 +35,7 @@ function actualizar (req, res){
         if(boardgame.description && boardgame.description.length > 200){
             return res.status(400).send({error:true, mensaje:"La descripcion no debe tener mas de 200 caracteres"})
         }
-        if(boardgame.year && boardgame.year!=4){
+        if(boardgame.year && boardgame.year.length != 4){
             return res.status(400).send({error:true, mensaje:"El año debe tener 4 caracteres"})
         }
         let sql = "update boardgames set ? where id = ?";

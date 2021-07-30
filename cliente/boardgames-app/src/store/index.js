@@ -26,12 +26,24 @@ export default new Vuex.Store({
       .then(onComplete)
       .catch(onError);
     },
+    editarJuego({commit}, {id, params, onComplete, onError}){
+      axios.put(`http://localhost:3000/boardgame/${id}`, params)
+      .then(onComplete)
+      .catch(onError);
+    },
+    obtenerJuego({commit}, {id, onComplete, onError}) {
+      axios.get(`http://localhost:3000/boardgame/${id}`)
+      .then(res => {
+        commit('SET_JUEGO', res.data.result);
+        onComplete(res);
+      })
+      .catch(onError);
+    },
       listar({commit}){
       axios.get('http://localhost:8080/boardgame')
       .then(Response =>commit('SET_JUEGO', response.data))      
       
     }
-     
   },
   modules: {
   }
