@@ -4,7 +4,8 @@
       <router-link to="/">Inico</router-link> |
       <router-link to="/agregar">Agregar</router-link> |
       <router-link to="/detalle/1">Detalle</router-link> | 
-      <router-link to="/editar/1">editar</router-link>
+      <router-link to="/editar/1">Editar</router-link> |
+      <router-link to="/visualizar">Visualizar</router-link>
 
     </div>
     <router-view/>

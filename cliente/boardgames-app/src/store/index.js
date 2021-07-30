@@ -39,11 +39,24 @@ export default new Vuex.Store({
       })
       .catch(onError);
     },
-      listar({commit}){
-      axios.get('http://localhost:8080/boardgame')
-      .then(Response =>commit('SET_JUEGO', response.data))      
-      
-    }
+    listar({commit}, {onComplete, onError}) {
+      axios.get("http://localhost:3000/boardgame")
+      .then(res => {
+        commit('SET_JUEGOS', res.data.result);
+        onComplete(res);
+      })
+      .catch(onError);
+    },
+    addFav({commit}, {idBoardgame, onComplete, onError}){
+      axios.post("http://localhost:3000/favorites", idBoardgame)
+      .then(onComplete)
+      .catch(onError)
+    },
+    eliminarBoardgame({commit}, {id, onComplete, onError}){
+      axios.delete(`http://localhost:3000/boardgame/${id}`)
+      .then(onComplete)
+      .catch(onError)
+    },
   },
   modules: {
   }
