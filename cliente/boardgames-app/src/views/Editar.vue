@@ -1,97 +1,53 @@
 <template>
-  <div class="mx-5">
-    <form @submit.prevent="editar()">
-      <h1 class="d-inline-block">Editar juego de mesa</h1>
-      <b-button
-        class="d-inline-block rounded float-end"
-        size="lg"
-        type="submit"
-        pill
-        variant="primary"
-        >Editar</b-button
-      >
-      <div>
-        <label class="mt-3" for="idx">ID: </label>
-        <b-form-input
-          :value="this.$route.params.id"
-          id="idx"
-          readonly
-          type="text"
-          disabled
-          trim
-        ></b-form-input>
-      </div>
-      <div>
-        <label class="mt-3" for="name">Nombre del juego de mesa:</label>
-        <b-form-input
-          v-model="this.juego.name"
-          id="name"
-          type="text"
-          readonly
-          disabled
-          trim
-        ></b-form-input>
-      </div>
-      <div>
-        <label class="mt-3" for="publisher">Editor: </label>
-        <b-form-input
-          v-model="this.juego.publisher"
-          id="publisher"
-          type="text"
-          trim
-        ></b-form-input>
-      </div>
+  <div>
+    <h1>Editar juego</h1>
+    <form @submit.prevent="guardarJuego()">
+      <Input :value="$route.params.id" titulo="Clave" id="id" disabled />
+      <Input v-model="juego.name" titulo="Nombre" id="name" disabled />
+
+      <Input
+        v-model="juego.publisher"
+        titulo="Editor"
+        id="publisher"
+        type="text"
+        placeholder="Ingrese el editor"
+        :maxlength="60"
+      />
       <div>
         <label class="mt-3">Categoria: </label>
         <b-form-select
-          v-model="this.juego.category"
+          v-model="juego.category"
           :options="opciones"
           size="sm"
           class="mt-3 form-select"
         ></b-form-select>
       </div>
+      <Input
+        v-model="juego.year"
+        titulo="Año"
+        id="year"
+        type="number"
+        placeholder="Ingrese el año"
+        :maxlength="4"
+      />
 
-      <div>
-        <label class="mt-3" for="description">Descripción: </label>
-        <b-form-input
-          v-model="this.juego.description"
-          id="description"
-        
-          placeholder="Escriba la descripción"
-          type="text"
-          trim
-        ></b-form-input>
-      </div>
-      <div>
-        <label class="mt-3" for="year">Año: </label>
-        <b-form-input
-          v-model="this.juego.year"
-          id="year"
-          
-          placeholder="Escriba el año"
-          type="text"
-          trim
-        ></b-form-input>
-      </div>
+      <b-button type="submit" variant="primary" class="my-2">Guardar</b-button>
     </form>
   </div>
 </template>
 
 <script>
-import Vue from "vue"
-import { mapActions} from "vuex";
+import Vue from "vue";
+import Input from "../components/Input.vue";
+import { mapActions, mapState } from "vuex";
+
 export default {
-  name: "Agregar",
-  components: {},
+  name: "Editar",
+  components: { Input },
   data() {
     return {
-      juego: {
-        name: "",
-        publisher: "",
-        description: "",
-        category: null,
-        year: "",
-      },
+      juego: {},
+      erroresValidacion: false,
       opciones: [
         { value: "11", text: "Aventura" },
         { value: "12", text: "Puzzle" },
@@ -102,96 +58,54 @@ export default {
     };
   },
   computed: {
-    validacionPublisher() {
-      return (
-        this.juego.publisher !== undefined &&
-        this.juego.publisher.trim() !== "" &&
-        this.juego.publisher.length <= 60
-      );
-    },
-    validacionDescription() {
-      if(this.juego.description === undefined){
-        return false;
+    validacionDatos() {
+      if(juego.publisher.length === 0){
+        return 1;
+      }else if (juego.publisher.length > 60){
+        return 2;
+      } else if(juego.year.length === 0){
+        return 0;
+      } else if(juego.year.length != 4){
+        return 3;
       }
-      return (
-        this.juego.description.length <= 200 ||
-        this.juego.description.length === 0
-      );
-    },
-    validacionYear() {
-      if(this.juego.year === undefined){
-        return false;
-      }
-      return this.juego.year.length === 4 || this.juego.year.length === 0;
-    },
-    msjPublisher() {
-      // if (this.juego.publisher === "") {
-      //   return "Campo obligatorio";
-      // } else if (this.juego.publisher.length > 80) {
-      //   return "Longitud máxima exedida";
-      // }
-      return "Campo obligatorio";
-    },
-    msjDescription() {
-      return "Longitud máxima excedida";
-    },
-    msjYear() {
-      return "La longitud debe de ser de 4";
+      return 0;
     },
   },
-
   methods: {
-    ...mapActions(["agregarJuego", "editarJuego", "obtenerJuego"]),
-    editar() {
-      if (this.validarCampos()) {
+    ...mapActions(["editarJuego", "obtenerJuego"]),
+    guardarJuego() {
         this.editarJuego({
           id: this.$route.params.id,
-          props: this.juego,
+          params: {publisher: this.juego.publisher, category: this.juego.category, year: this.juego.year},
           onComplete: (response) => {
             console.log(response);
             this.$notify({
-              type: "success",
               title: response.data.mensaje,
+              type: "success",
             });
             this.$router.push({
-              name: "Home", 
+              name: "Home",
             });
           },
           onError: (error) => {
+            console.log(error.response.data.mensaje);
             this.$notify({
               type: "error",
               title: error.response.data.mensaje,
             });
           },
         });
-      } else {
-        this.$notify({
-          type: "error",
-          title: "Verifica los campos",
-        });
-      }
-    },
-    validarCampos() {
-      return true;
-      if (
-        this.juego[0].publisher.length > 60 ||
-        this.juego[0].description.length > 200 ||
-        (this.juego[0].year.length != 0 && this.juego.year.length != 4)
-      ) {
-        return false;
-      }
-      return true;
     },
   },
-  created() {
+  mounted() {
     this.obtenerJuego({
       id: this.$route.params.id,
       onComplete: (response) => {
-        this.juego = response.data.result[0];
+        Vue.set(this, "juego", response.data.result);
       },
     });
   },
 };
 </script>
 
-<style scoped></style>
+<style></style>

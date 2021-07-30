@@ -2,13 +2,13 @@ const connection = require('../config/connection');
 
 function listarById (req, res) {
     if(connection){
-        const {id}= req.params;
+        const {id} = req.params;
         let sql = "select b.name, b.publisher, b.category, b.description, b.year, CASE WHEN  f.idBoardgame IS NULL THEN FALSE ELSE TRUE END as favorites from boardgames b left join favorites f on f.idBoardgame = b.id where b.id = ?";
         connection.query(sql, [id], (err, data) => {
             if(err){
                 res.status(400).json(err);
             }else{
-                res.json({error: false, result: data});
+                res.json({error: false, result: data[0]});
             }
         });
     }
@@ -35,7 +35,7 @@ function actualizar (req, res){
         if(boardgame.description && boardgame.description.length > 200){
             return res.status(400).send({error:true, mensaje:"La descripcion no debe tener mas de 200 caracteres"})
         }
-        if(boardgame.year && boardgame.year!=4){
+        if(boardgame.year && boardgame.year.length != 4){
             return res.status(400).send({error:true, mensaje:"El año debe tener 4 caracteres"})
         }
         let sql = "update boardgames set ? where id = ?";
@@ -153,13 +153,11 @@ function listarfav(req, res){
 function crearfav(req,res){
     if(connection){
         const favorites = req.body;
-
-        let sql ="INSERT INTO favorites (idBoardgame) VALUES (?)";
-
         if(!favorites.idBoardgame){
             return res.status(400).send({error:true, mensaje:"No se envio idBoardgame"})
         }
-        
+        let sql ="INSERT INTO favorites (idBoardgame) VALUES (?)";
+  
         connection.query(sql,[favorites.idBoardgame], (err, data) => {
             if(err){
                 res.status(400).json(err);
