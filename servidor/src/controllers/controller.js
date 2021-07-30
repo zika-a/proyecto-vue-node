@@ -3,7 +3,7 @@ const connection = require('../config/connection');
 function listarById (req, res) {
     if(connection){
         const {id}= req.params;
-        let sql = "select b.id, b.name, b.publisher, b.category, b.description, b.year, CASE WHEN  f.idBoardgame IS NULL THEN FALSE ELSE TRUE END as favorites from boardgames b left join favorites f on f.idBoardgame = b.id where b.id = ?";
+        let sql = "select b.name, b.publisher, b.category, b.description, b.year, CASE WHEN  f.idBoardgame IS NULL THEN FALSE ELSE TRUE END as favorites from boardgames b left join favorites f on f.idBoardgame = b.id where b.id = ?";
         connection.query(sql, [id], (err, data) => {
             if(err){
                 res.status(400).json(err);
@@ -20,12 +20,12 @@ function actualizar (req, res){
     if(connection){
         const {id} = req.params;
         const boardgame = req.body;
-        if(boardgame.name){
-            return res.status(400).send({error:true, mensaje:"El nombre no se puede modificar"})
-        }
-        if(boardgame.id){
-            return res.status(400).send({error: true, mensaje: "El id no se puede modificar"});
-        }
+        // if(boardgame.name){
+        //     return res.status(400).send({error:true, mensaje:"El nombre no se puede modificar"})
+        // }
+        // if(boardgame.id){
+        //     return res.status(400).send({error: true, mensaje: "El id no se puede modificar"});
+        // }
         if(boardgame.publisher && boardgame.publisher.length > 60 ){
             return res.status(400).send({error:true, mensaje:"El editor no debe tener mas de 60 caracteres"})
         }
@@ -164,7 +164,7 @@ function crearfav(req,res){
             if(err){
                 res.status(400).json(err);
             } else {
-                res.json({error:false,resultado: data, mensaje:"Boardgame agregado a favoritos"});
+                res.json({error:false,result: data, mensaje:"Boardgame agregado a favoritos"});
             }
         });
     }
