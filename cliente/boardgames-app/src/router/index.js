@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Agregar from '../views/Agregar.vue'
+import Editar from '../views/Editar.vue'
 
 Vue.use(VueRouter)
 
@@ -20,9 +21,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/Agregar',
+    path: '/agregar',
     name: 'agregar',
     component: Agregar
+  },
+  {
+    path: '/editar/:id',
+    name: 'Editar',
+    component: Editar
   }
 ]
 
