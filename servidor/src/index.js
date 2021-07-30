@@ -5,6 +5,7 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 //Levantar el servidor
 app.listen(app.get("port"), (error) => {
   if (error) {
