@@ -2,6 +2,10 @@ const express = require('express');
 
 const routes = express.Router();
 
+routes.get('/hola',(req,res)=>{
+res.json({mensaje:"hola"})
+})
+
 const {listarById, actualizar, eliminarBoardgame, eliminarFavoritos,listar,crear,listarfav,crearfav} = require('../controllers/controller');
 
 //Creación de las rutas

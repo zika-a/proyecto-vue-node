@@ -12,9 +12,9 @@ export default {
     props:{
         items:Array,
         fields:Array
-    }
-    
+    }  
 }
+
 </script>
 
 <style>
