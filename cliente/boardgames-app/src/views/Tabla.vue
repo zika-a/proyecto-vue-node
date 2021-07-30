@@ -1,28 +1,23 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <Tabla :items="boargames" :fields="campos"/>
-
+  <div class="tabla">
+      <Tabla :items="posts" :fields="campos"/>
   </div>
+
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-import Tabla from '../components/Tabla.vue'
+import Tabla from '.../components/Tabla.vue'
 
 export default {
-  name: 'Home',
+  name: 'Tabla',
   components: {
-    HelloWorld,
-    Tabla
+    Tabla,
   },
   data(){
     return{
       campos:[
         {
-          key:'nombre',
+          key:'name',
           label:'Nombre'
         },
         {
@@ -39,7 +34,21 @@ export default {
         }
       ]
     }
+  },
+  computed:{
+    ...mapState(['posts'])
+  },
+  methods:{
+    ...mapActions(['getPosts'])
+  },
+  created(){
+    this.getPosts()
   }
+
 
 }
 </script>
+
+<style>
+
+</style>
