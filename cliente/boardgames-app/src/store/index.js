@@ -3,22 +3,35 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 Vue.use(Vuex)
-
 export default new Vuex.Store({
-  state: {
-    posts:[],
+  state: {    
+    juegos:[],
+    juego: {},
+    loading: false,
   },
   mutations: {
-    SET_POSTS(state,data){
-      state.posts = data;
-    }
+    SET_JUEGOS(state, juegos) {
+      state.juegos = juegos;
+    },
+    SET_JUEGO(state, juego) {
+      state.juego = juego;
+    },
+    SET_LOADING(state, newValue) {
+      state.loading = newValue;
+    },
   },
   actions: {
-    listar({commit}){
+    agregarJuego({commit}, {params, onComplete, onError}){
+      axios.post('http://localhost:3000/boardgame', params)
+      .then(onComplete)
+      .catch(onError);
+    },
+      listar({commit}){
       axios.get('http://localhost:8080/boardgame')
-      .then(Response =>commit('SET_POSTS', Response.data))      
+      .then(Response =>commit('SET_JUEGO', response.data))      
       
     }
+     
   },
   modules: {
   }

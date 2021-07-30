@@ -62,7 +62,7 @@ function eliminarBoardgame(req, res){
             }else{
                 let mensaje = "";
                 if(data.affectedRows === 0) mensaje="Juego no encontrado";
-                else mensaje = "Juego elimnado con exito";
+                else mensaje = "Juego de mesa eliminado";
                 res.json({error: false, result: data, mensaje});
             }
         });
@@ -109,19 +109,19 @@ function crear(req, res){
             return res.status(400).send({error:true, mensaje:"La categoria es obligatoria"})
         }
 
-        if(boardgame.Name && boardgame.name.length > 80){
+        if(boardgame.name && boardgame.name.length > 80){
             return res.status(400).send({error:true, mensaje:"El nombre no debe tener mas de 80 caracteres"})
         }
         if(boardgame.publisher && boardgame.publisher.length > 60){
             return res.status(400).send({error:true, mensaje:"El editor no debe tener mas de 60 caracteres"})
         }
         if(boardgame.category && boardgame.category.length != 2){
-            return res.status(400).send({error:true, mensaje:"La debe tener dos caracteres"})
+            return res.status(400).send({error:true, mensaje:"La categoria debe tener dos caracteres"})
         }
         if(boardgame.description && boardgame.description.length > 200){
             return res.status(400).send({error:true, mensaje:"La descripcion no debe tener mas de 200 caracteres"})
         }
-        if(boardgame.year && boardgame.year.length > 4){
+        if(boardgame.year && boardgame.year.length != 4){
             return res.status(400).send({error:true, mensaje:"El año debe tener 4 caracteres"})
         }
 
@@ -131,7 +131,7 @@ function crear(req, res){
             if(err){
                 res.status(400).json(err);
             } else {
-                res.json({error:false,resultado: data, mensaje:"Boardgame creado con exito"});
+                return res.json({error:false,result: data, mensaje:"Boardgame creado con exito"});
             }
         });
     }
