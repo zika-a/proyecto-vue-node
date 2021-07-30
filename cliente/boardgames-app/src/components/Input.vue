@@ -1,27 +1,18 @@
 <template>
   <div>
-    
-    <label :for="id">Titulo:</label>
-    <b-form-input
-      :id="id"
-      :state="error"
-      :placeholder="placeholder"
-      :type="type"
-      :disabled="disabled"
-      :max="maxlength"
-      trim
-    ></b-form-input>
-    <b-form-invalid-feedback>
-      {{mensajeError}}
-    </b-form-invalid-feedback>
-
-    <!-- Se deberán de ingresar los datos:
-- Name
-- Publisher
-- Description
-- Category
-- Year -->
-
+    <label :for="id" class="my-2">{{ titulo }}</label>
+    <input 
+        :id="id" 
+        :type="type"  
+        class="form-control" 
+        :maxlength="maxlength" 
+        :disabled="disabled"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        :value="value"
+        @input="$emit('input', $event.target.value)"
+    />
+    <span v-if="error" class="text-danger">{{mensajeError}}</span>
   </div>
 </template>
 
@@ -41,6 +32,10 @@ export default {
       type: String,
       default: "text",
     },
+    maxlength: {
+      type: Number,
+      default: 100,
+    },
     disabled: {
         type: Boolean,
         default: false
@@ -49,7 +44,7 @@ export default {
         type: String,
         default: ''
     },
-    value: {
+     value: {
         type: [String, Number],
         default: ''
     },
@@ -66,7 +61,6 @@ export default {
         default: 'Campo obligatorio'
     }
   },
-  
 };
 </script>
 

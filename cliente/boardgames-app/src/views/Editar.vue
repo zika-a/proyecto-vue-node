@@ -1,91 +1,85 @@
 <template>
   <div class="mx-5">
-    <form @submit.prevent="guardarJuego()">
-      <h1 class="d-inline-block">Añadir juego de mesa</h1>
+    <form @submit.prevent="editar()">
+      <h1 class="d-inline-block">Editar juego de mesa</h1>
       <b-button
         class="d-inline-block rounded float-end"
         size="lg"
         type="submit"
         pill
         variant="primary"
-        >Añadir</b-button
+        >Editar</b-button
       >
+      <div>
+        <label class="mt-3" for="idx">ID: </label>
+        <b-form-input
+          :value="this.$route.params.id"
+          id="idx"
+          readonly
+          type="text"
+          disabled
+          trim
+        ></b-form-input>
+      </div>
       <div>
         <label class="mt-3" for="name">Nombre del juego de mesa:</label>
         <b-form-input
-          v-model="juego.name"
+          v-model="this.juego.name"
           id="name"
-          :state="validacionNombre"
-          placeholder="Ingresar nombre del juego"
           type="text"
+          readonly
+          disabled
           trim
         ></b-form-input>
-        <b-form-invalid-feedback>
-          {{ msjNom }}
-        </b-form-invalid-feedback>
       </div>
       <div>
         <label class="mt-3" for="publisher">Editor: </label>
         <b-form-input
-          v-model="juego.publisher"
+          v-model="this.juego.publisher"
           id="publisher"
-          :state="validacionPublisher"
-          placeholder="Ingresar editor del juego"
           type="text"
           trim
         ></b-form-input>
-        <b-form-invalid-feedback>
-          {{ msjPublisher }}
-        </b-form-invalid-feedback>
       </div>
       <div>
         <label class="mt-3">Categoria: </label>
         <b-form-select
-          v-model="juego.category"
+          v-model="this.juego.category"
           :options="opciones"
-          :state="validacionCategory"
           size="sm"
           class="mt-3 form-select"
         ></b-form-select>
-        <b-form-invalid-feedback>
-          {{ msjCategory }}
-        </b-form-invalid-feedback>
       </div>
 
       <div>
         <label class="mt-3" for="description">Descripción: </label>
         <b-form-input
-          v-model="juego.description"
+          v-model="this.juego.description"
           id="description"
-          :state="validacionDescription"
+        
           placeholder="Escriba la descripción"
           type="text"
           trim
         ></b-form-input>
-        <b-form-invalid-feedback>
-          {{ msjDescription }}
-        </b-form-invalid-feedback>
       </div>
       <div>
         <label class="mt-3" for="year">Año: </label>
         <b-form-input
-          v-model="juego.year"
+          v-model="this.juego.year"
           id="year"
-          :state="validacionYear"
+          
           placeholder="Escriba el año"
           type="text"
           trim
         ></b-form-input>
-        <b-form-invalid-feedback>
-          {{ msjYear }}
-        </b-form-invalid-feedback>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapActions} from 'vuex';
+import Vue from "vue"
+import { mapActions} from "vuex";
 export default {
   name: "Agregar",
   components: {},
@@ -108,13 +102,6 @@ export default {
     };
   },
   computed: {
-    validacionNombre() {
-      return (
-        this.juego.name !== undefined &&
-        this.juego.name.trim() !== "" &&
-        this.juego.name.length <= 80
-      );
-    },
     validacionPublisher() {
       return (
         this.juego.publisher !== undefined &&
@@ -122,31 +109,27 @@ export default {
         this.juego.publisher.length <= 60
       );
     },
-    validacionCategory() {
-      return this.juego.category !== null;
-    },
     validacionDescription() {
-      return this.juego.description.length <= 200 || this.juego.description.length ===0;
+      if(this.juego.description === undefined){
+        return false;
+      }
+      return (
+        this.juego.description.length <= 200 ||
+        this.juego.description.length === 0
+      );
     },
     validacionYear() {
-      return this.juego.year.length === 4 ||
-      this.juego.year.length === 0;
-    },
-    msjNom() {
-      if (this.juego.name === "") {
-        return "Campo obligatorio";
-      } else if (this.juego.name.length > 80) {
-        return "Longitud máxima exedida";
+      if(this.juego.year === undefined){
+        return false;
       }
+      return this.juego.year.length === 4 || this.juego.year.length === 0;
     },
     msjPublisher() {
-      if (this.juego.publisher === "") {
-        return "Campo obligatorio";
-      } else if (this.juego.publisher.length > 80) {
-        return "Longitud máxima exedida";
-      }
-    },
-    msjCategory() {
+      // if (this.juego.publisher === "") {
+      //   return "Campo obligatorio";
+      // } else if (this.juego.publisher.length > 80) {
+      //   return "Longitud máxima exedida";
+      // }
       return "Campo obligatorio";
     },
     msjDescription() {
@@ -158,14 +141,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(["agregarJuego"]),
-    guardarJuego() {
-       if (this.validarCampos()) {//falta las validacioens
-        this.erroresValidacion = false;
-        console.log("Si puedo guardar");
-
-        this.agregarJuego({
-          params: this.juego,
+    ...mapActions(["agregarJuego", "editarJuego", "obtenerJuego"]),
+    editar() {
+      if (this.validarCampos()) {
+        this.editarJuego({
+          id: this.$route.params.id,
+          props: this.juego,
           onComplete: (response) => {
             console.log(response);
             this.$notify({
@@ -173,8 +154,8 @@ export default {
               title: response.data.mensaje,
             });
             this.$router.push({
-                name: 'Home'
-            })
+              name: "Home", 
+            });
           },
           onError: (error) => {
             this.$notify({
@@ -185,17 +166,30 @@ export default {
         });
       } else {
         this.$notify({
-              type: "error",
-              title: "Verifica los campos",
-            });
+          type: "error",
+          title: "Verifica los campos",
+        });
       }
     },
-    validarCampos(){
-      if(this.juego.name.length > 80 ||this.juego.publisher.length > 60 || this.juego.description.length > 200 || (this.juego.year.length !=0  &&  this.juego.year.length !=4)){
+    validarCampos() {
+      return true;
+      if (
+        this.juego[0].publisher.length > 60 ||
+        this.juego[0].description.length > 200 ||
+        (this.juego[0].year.length != 0 && this.juego.year.length != 4)
+      ) {
         return false;
       }
       return true;
-    }
+    },
+  },
+  created() {
+    this.obtenerJuego({
+      id: this.$route.params.id,
+      onComplete: (response) => {
+        this.juego = response.data.result[0];
+      },
+    });
   },
 };
 </script>
