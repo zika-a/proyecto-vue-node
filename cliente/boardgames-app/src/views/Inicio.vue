@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    {{posts}}
+    <Tabla :items="favoritos" :fields="fields"></Tabla>
   </div>
 </template>
 
@@ -8,24 +8,51 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import Tabla from '../components/Tabla.vue'
-
-import {mapState, mapActions} from 'vuex'
+import Vue from "vue"
+import {mapActions} from 'vuex'
 
 
 export default {
   name: 'Home',
   components: {
-    
+    Tabla
   },
-  computed:{
-    ...mapState(['posts'])
+  data(){
+    return{
+      favoritos: [],
+      fields:[
+        {
+          key:"idBoardgame"
+        },
+        {
+          key:"name",
+          label:"Nombre"
+        }, 
+        {
+          key: "publisher",
+          label: "Editor"
+        },
+        {
+          key:"year",
+          label:"Año"
+        },
+        {
+          key:"category",
+          label:"Categoría",
+        }
+      ],
+    }
   },
   methods:{
-    ...mapActions(['getPosts'])
+    ...mapActions(['listarFav'])
   },
-  created(){
-    this.getPosts()
-  }
+  mounted() {
+    this.listarFav({
+      onComplete: (response) => {
+        Vue.set(this, "favoritos", response.data.result);
+      },
+    });
+  },
 
 }
 </script>
