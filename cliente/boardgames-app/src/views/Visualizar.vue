@@ -10,6 +10,7 @@
       :year="dato.year"
       :description="dato.description"
       :publisher="dato.publisher"
+      :favorites="dato.favorites"
     >
     </Tarjeta>
   </div>

@@ -57,6 +57,11 @@ export default new Vuex.Store({
       .then(onComplete)
       .catch(onError)
     },
+    eliminarFav({commit}, {id, onComplete, onError}){
+      axios.delete(`http://localhost:3000/favorites/${id}`)
+      .then(onComplete)
+      .catch(onError)
+    },
   },
   modules: {
   }
