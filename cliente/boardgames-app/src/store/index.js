@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from "axios";
+import axios from 'axios'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
-  state: {
+  state: {    
     juegos:[],
     juego: {},
     loading: false,
@@ -26,6 +26,12 @@ export default new Vuex.Store({
       .then(onComplete)
       .catch(onError);
     },
+      listar({commit}){
+      axios.get('http://localhost:8080/boardgame')
+      .then(Response =>commit('SET_JUEGO', response.data))      
+      
+    }
+     
   },
   modules: {
   }
