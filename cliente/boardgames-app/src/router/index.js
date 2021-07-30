@@ -30,6 +30,7 @@ const routes = [
     name: 'Editar',
     component: Editar
   }
+
 ]
 
 const router = new VueRouter({

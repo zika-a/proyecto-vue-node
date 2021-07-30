@@ -2,7 +2,10 @@
   <div id="app">
     <div id="nav" class="text-center">
       <router-link to="/">Home</router-link> |
-      <router-link to="/editar/1">Editar</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/tabla">Tabla</router-link> |
+      <router-link to="/agregar">Agregar</router-link>
+
     </div>
     <router-view/>
     <notifications position="bottom right" />
