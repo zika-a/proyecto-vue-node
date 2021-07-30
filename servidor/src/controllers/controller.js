@@ -139,7 +139,7 @@ function crear(req, res){
 
 function listarfav(req, res){
     if(connection){
-        let sql = "select b.name, b.publisher, b.year, f.idBoardgame from boardgames b inner join favorites f on f.idBoardgame = b.id";
+        let sql = "select b.name, b.publisher,b.category, b.year, f.idBoardgame from boardgames b inner join favorites f on f.idBoardgame = b.id";
         connection.query(sql, (err, data) => {
             if(err){
                 res.status(400).json(err);

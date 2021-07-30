@@ -1,26 +1,47 @@
 <template>
   <div class="home">
-    {{posts}}
+    <Tabla :items="listarfav" :fields="campos"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import Tabla from '@/components/Tabla.vue'
 import {mapState, mapActions} from 'vuex'
+
 
 export default {
   name: 'Home',
   components: {
-    
+    Tabla,
   },
-  computed:{
-    ...mapState(['posts'])
+    data(){
+    return{
+      campos:[
+        {
+          key:'name',
+          label:'Nombre'
+        },
+        {
+          key:'publisher',
+          label:'Editor'
+        },
+        {
+          key:'category',
+          label:'Categoria'
+        },
+        {
+          key:'year',
+          label:'Año'
+        }
+      ]
+    }
   },
   methods:{
-    ...mapActions(['getPosts'])
+    ...mapActions(['listarfav'])
   },
   created(){
-    this.getPosts()
+    this.listarfav()
   }
 
 }
