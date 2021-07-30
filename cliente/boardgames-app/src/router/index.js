@@ -4,13 +4,14 @@ import Inicio from '../views/Inicio.vue'
 import Agregar from '../views/Agregar.vue'
 import Editar from '../views/Editar.vue'
 import Detalle from '../views/Detalle.vue'
+import Visualizar from '../views/Visualizar.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'inicio',
+    name: 'Inicio',
     component: Inicio
   },
   {
@@ -27,7 +28,12 @@ const routes = [
     path: '/detalle/:id',
     name: 'Detalle',
     component: Detalle
-  }
+  },
+  {
+    path: '/visualizar',
+    name: 'Visualizar',
+    component: Visualizar
+  },
 
 ]
 

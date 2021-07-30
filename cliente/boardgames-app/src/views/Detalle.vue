@@ -3,7 +3,7 @@
     <h4>ID: {{ $route.params.id }}</h4>
     <h2>Nombre: {{ juego.name }}</h2>
     <h3>Editor: {{ juego.publisher }}</h3>
-    <h4>Categoria: {{ juego.category }}</h4>
+    <h4>Categoria: {{opciones[index].text}}</h4>
     <h5>Año: {{ juego.year }}</h5>
     <p>Descripción: {{ juego.description }}</p>
   </div>
@@ -15,7 +15,6 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      // nomCat : "",
       juego: {},
       opciones: [
         { value: "11", text: "Aventura" },
@@ -27,14 +26,9 @@ export default {
     };
   },
   computed: {
-    nomCat() {
-        console.log("aqu ando");
-      for (let i = 0; i < 5; i++) {
-        if (juego.category == opciones[i].value) {
-          return opciones[i].text;
-        }
-      }
-    },
+    index: function(){
+      return this.opciones.findIndex(x => x.value == this.juego.category);
+    }
   },
   methods: {
     ...mapActions(["obtenerJuego"]),
